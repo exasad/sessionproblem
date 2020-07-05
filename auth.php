@@ -1,7 +1,19 @@
 <?php
-session_start([
-    'cookie_lifetime'=>300,
-]);
+session_start( [
+    'cookie_lifetime' => 300,
+] );
+
+if (isset($_POST['username']) && $_POST['password']) {
+    if ($_POST['username']=='admin' && $_POST['password']=='password') {
+        $_SESSION['loggedin']=true;
+    }else{
+        $_SESSION['loggedin']=false;
+    }
+}
+if (isset($_POST['logout'])) {
+    session_destroy();
+}
+
 
 ?>
 
@@ -31,20 +43,26 @@ session_start([
     </div>
     <div class="row">
         <div class="column column-60 column-offset-20">
-            <?php
+            
+              <?php 
+                if (isset($_SESSION['loggedin'])) {
+                    echo "Hello Admin, Welcome";
+                }else{
+                    echo "Hello User, Login Blow";
+                }
 
-            if (true == $_SESSION[loggedin]){
-                echo "Hello Admin";
-            }else{
-                echo "Hello User";
-            }
-            ?>
-
+               ?>
 
         </div>
     </div>
     <div class="row" style="...">
+   
         <div class="column column-60 column-offset-20">
+                <?php 
+                    if (isset($_SESSION['loggedin'])==false):
+                   
+
+                 ?>
             <form action="" method="POST">
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username">
@@ -53,7 +71,13 @@ session_start([
                 <button type="submit" class="button-primary" name="submit">Login In</button>
             </form>
         </div>
-    </div>
+        <?php else: ?>
+            <form accept="auth.php" method="POST">
+                <input type="hidden" name="logout" value="1">
+                <button type="submit" class="button-primary" name="submit">Login Out</button>
+            </form>
+    <?php endif; ?>
+
 </div>
 </body>
 </html>
